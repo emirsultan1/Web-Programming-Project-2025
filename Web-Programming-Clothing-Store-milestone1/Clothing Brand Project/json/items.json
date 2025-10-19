@@ -1,0 +1,111 @@
+[
+    {
+        "itemName" : "Cosmic Fleece Hoodie",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "A soft, fleece-lined hoodie featuring a unique galaxy print. Ideal for chilly evenings and casual wear, offering warmth and a touch of the universe.",
+        "itemID" : 1,
+        "itemImage" : "assets/img/product/product4.jpg",
+        "itemDiscount" : "-7%"
+    },
+    {
+        "itemName" : "Summit Zip-Up Hoodie;D",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "A versatile, zip-up hoodie designed for layering. Made with a blend of cotton and polyester, it's perfect for hiking or a casual day out",
+        "itemID" : 2,
+        "itemImage" : "assets/img/product/product16.jpg",
+        "itemDiscount" : "-7%"
+    },
+    {
+        "itemName" : "Trailblazer Hiking Boots",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "Designed for the outdoors, these boots offer superior grip, ankle support, and waterproof protection. Perfect for hiking trails and rough terrain.",
+        "itemID" : 3,
+        "itemImage" : "assets/img/product/product1.jpg",
+        "itemDiscount" : "-7%"
+    },{
+        "itemName" : "Velocity Running Sneakers",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "Lightweight and breathable, these sneakers are built for speed and comfort. Features a cushioned insole and flexible sole, ideal for long runs and high-impact workouts.",
+        "itemID" : 4,
+        "itemImage" : "assets/img/product/product23.jpg",
+        "itemDiscount" : "-7%"
+    },
+    {
+        "itemName" : "Urban Commuter Trainers",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "Versatile and stylish, these trainers are designed for the urban lifestyle. Comfortable for all-day wear and sleek enough for casual office settings or weekend outings.",
+        "itemID" : 5,
+        "itemImage" : "assets/img/product/product21.jpg",
+        "itemDiscount" : "-7%"
+    },
+    {
+        "itemName" : "AquaTread Water Shoes",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "Perfect for water sports and beach activities, these shoes offer protection and grip on wet surfaces. Quick-drying and lightweight, with a mesh upper for maximum airflow.",
+        "itemID" : 6,
+        "itemImage" : "assets/img/product/product25.jpg",
+        "itemDiscount" : "-7%"
+    },
+    {
+        "itemName" : "Vintage Wash Pullover",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "This pullover hoodie features a unique vintage wash, giving it a well-loved look from the first wear. Soft, comfortable, and perfect for any casual wardrobe.",
+        "itemID" : 7,
+        "itemImage" : "assets/img/product/product5.jpg",
+        "itemDiscount" : "-7%"
+    },
+    {
+        "itemName" : "TechSmart Hoodie",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "Designed for the tech enthusiast, this hoodie features integrated headphone loops and a zippered pocket for devices. Stylish and functional, it's perfect for keeping your gadgets secure on the go.",
+        "itemID" : 8,
+        "itemImage" : "assets/img/product/product10.jpg",
+        "itemDiscount" : "-7%"
+    },
+    {
+        "itemName" : "Meho",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "gndklj;fhbnvilojdfhvbfkdlj;hvb;lk",
+        "itemID" : 9,
+        "itemImage" : "assets/img/product/product7.jpg",
+        "itemDiscount" : "-7%"
+    },
+    {
+        "itemName" : "Meho",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "gndklj;fhbnvilojdfhvbfkdlj;hvb;lk",
+        "itemID" : 10,
+        "itemImage" : "assets/img/product/product11.jpg",
+        "itemDiscount" : "-7%"
+    },
+    {
+        "itemName" : "Meho",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "gndklj;fhbnvilojdfhvbfkdlj;hvb;lk",
+        "itemID" : 11,
+        "itemImage" : "assets/img/product/product14.jpg",
+        "itemDiscount" : "-7%"
+    },
+    {
+        "itemName" : "Meho",
+        "itemOldPrice" : "80.00",
+        "itemNewPrice" : "60.00",
+        "itemDescription" : "gndklj;fhbnvilojdfhvbfkdlj;hvb;lk",
+        "itemID" : 12,
+        "itemImage" : "assets/img/product/product17.jpg",
+        "itemDiscount" : "-7%"
+    }
+
+
+]
