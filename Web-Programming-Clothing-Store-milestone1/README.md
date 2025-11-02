@@ -1,2 +1,0 @@
-# Web Programming Clothing Store
- 
