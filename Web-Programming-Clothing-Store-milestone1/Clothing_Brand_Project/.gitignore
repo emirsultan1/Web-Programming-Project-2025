@@ -1,0 +1,12 @@
+# Ignore environment variables
+backend/.env
+
+# Dependencies and system files
+/vendor/
+/node_modules/
+.DS_Store
+.idea/
+.vscode/
+
+# Optional: ignore other temp/test files
+backend/tests/test_db.php
