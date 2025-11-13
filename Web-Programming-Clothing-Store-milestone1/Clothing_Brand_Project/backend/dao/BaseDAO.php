@@ -21,13 +21,16 @@ abstract class BaseDAO {
 
     /** 🔹 Create (INSERT) */
     public function create(array $data): int {
+        if (empty($data)) {
+            throw new InvalidArgumentException('create() requires non-empty data');
+        }
         $columns = array_keys($data);
         $placeholders = array_map(fn($c) => ":$c", $columns);
 
         $sql = sprintf(
             "INSERT INTO `%s` (%s) VALUES (%s)",
             $this->table,
-            implode(', ', $columns),
+            implode(', ', array_map(fn($c) => "`$c`", $columns)),
             implode(', ', $placeholders)
         );
 
@@ -45,6 +48,14 @@ abstract class BaseDAO {
         return $row ?: null;
     }
 
+    /** 🔹 Existence check */
+    public function exists(int $id): bool {
+        $sql = "SELECT 1 FROM `{$this->table}` WHERE `{$this->idCol}` = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return (bool)$stmt->fetchColumn();
+    }
+
     /** 🔹 Read all (SELECT all rows) */
     public function findAll(int $limit = 100, int $offset = 0): array {
         $sql = "SELECT * FROM `{$this->table}` ORDER BY `{$this->idCol}` DESC LIMIT :limit OFFSET :offset";
@@ -57,6 +68,8 @@ abstract class BaseDAO {
 
     /** 🔹 Update (by ID) */
     public function update(int $id, array $data): bool {
+        if (empty($data)) return true; // no-op
+
         $set = implode(', ', array_map(fn($c) => "`$c` = :$c", array_keys($data)));
         $sql = "UPDATE `{$this->table}` SET $set WHERE `{$this->idCol}` = :id";
 
@@ -70,5 +83,11 @@ abstract class BaseDAO {
         $sql = "DELETE FROM `{$this->table}` WHERE `{$this->idCol}` = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([':id' => $id]);
+    }
+
+    /** 🔹 Count (for pagination) */
+    public function countAll(): int {
+        $sql = "SELECT COUNT(*) FROM `{$this->table}`";
+        return (int)$this->pdo->query($sql)->fetchColumn();
     }
 }

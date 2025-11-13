@@ -39,4 +39,26 @@ class ProductsDAO extends BaseDAO {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function countAll(?int $categoryId = null): int {
+    if ($categoryId === null) {
+        $sql = "SELECT COUNT(*) FROM products";
+        return (int)$this->pdo->query($sql)->fetchColumn();
+    }
+    $sql = "SELECT COUNT(*) FROM products WHERE category_id = :cid";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':cid', $categoryId, PDO::PARAM_INT);
+    $stmt->execute();
+    return (int)$stmt->fetchColumn();
+}
+
+    public function findById(int $id): ?array {
+    $sql = "SELECT * FROM products WHERE product_id = :id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+    return $row ?: null;
+        }   
+
 }

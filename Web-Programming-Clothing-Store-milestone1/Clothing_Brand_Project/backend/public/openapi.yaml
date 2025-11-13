@@ -1,0 +1,734 @@
+openapi: 3.0.3
+info:
+  title: Clothing Store API
+  version: 0.3.0
+  description: >
+    REST API for the Clothing Store project (Milestone 3).
+    This spec covers core CRUD endpoints for all entities.
+servers:
+  - url: http://127.0.0.1:8080
+
+paths:
+  /api/v1/health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+                  ts: { type: string, format: date-time }
+
+  /api/v1/products:
+    get:
+      summary: List products
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 1000, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: category_id
+          schema: { type: integer }
+      responses:
+        '200':
+          description: List response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProductsResponse'
+    post:
+      summary: Create product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductCreate' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+
+  /api/v1/products/{id}:
+    get:
+      summary: Get product by id
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '200':
+          description: Product
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+        '404':
+          description: Not found
+    put:
+      summary: Update product
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProductUpdate' }
+      responses:
+        '200':
+          description: Updated product
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Product' }
+    delete:
+      summary: Delete product
+      parameters:
+        - $ref: '#/components/parameters/IdPath'
+      responses:
+        '204':
+          description: Deleted
+
+  /api/v1/categories:
+    get:
+      summary: List categories
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: List response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCategoriesResponse'
+    post:
+      summary: Create category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CategoryCreate' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Category' }
+
+  /api/v1/categories/{id}:
+    get:
+      summary: Get category
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '200':
+          description: Category
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Category' }
+    put:
+      summary: Update category
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CategoryUpdate' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Category' }
+    delete:
+      summary: Delete category
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '204': { description: Deleted }
+
+  /api/v1/users:
+    get:
+      summary: List users
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: List response
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ListUsersResponse' }
+    post:
+      summary: Create user (admin/dev only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UserCreate' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+
+  /api/v1/users/{id}:
+    get:
+      summary: Get user
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '200':
+          description: User
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+    put:
+      summary: Update user
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UserUpdate' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+    delete:
+      summary: Delete user
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '204': { description: Deleted }
+
+  /api/v1/orders:
+    get:
+      summary: List orders
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: List response
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ListOrdersResponse' }
+    post:
+      summary: Create order (with items)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OrderCreate' }
+      responses:
+        '200':
+          description: Created order
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+
+  /api/v1/orders/{id}:
+    get:
+      summary: Get order
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '200':
+          description: Order
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+    put:
+      summary: Update order (status)
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OrderUpdate' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+    delete:
+      summary: Delete order
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '204': { description: Deleted }
+
+  /api/v1/order-items:
+    get:
+      summary: List order items (optionally by order_id)
+      parameters:
+        - in: query
+          name: order_id
+          schema: { type: integer }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: List response
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ListOrderItemsResponse' }
+    post:
+      summary: Create order item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OrderItemCreate' }
+      responses:
+        '200':
+          description: Created order item
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OrderItem' }
+
+  /api/v1/order-items/{id}:
+    put:
+      summary: Update order item
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OrderItemUpdate' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/OrderItem' }
+    delete:
+      summary: Delete order item
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '204': { description: Deleted }
+
+  /api/v1/payments:
+    get:
+      summary: List payments
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: List response
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ListPaymentsResponse' }
+    post:
+      summary: Create payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentCreate' }
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payment' }
+
+  /api/v1/payments/{id}:
+    get:
+      summary: Get payment
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '200':
+          description: Payment
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payment' }
+    put:
+      summary: Update payment
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentUpdate' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payment' }
+    delete:
+      summary: Delete payment
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '204': { description: Deleted }
+
+  /api/v1/reviews:
+    get:
+      summary: List reviews (optionally by product_id)
+      parameters:
+        - in: query
+          name: product_id
+          schema: { type: integer }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: List response
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ListReviewsResponse' }
+    post:
+      summary: Create review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ReviewCreate' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Review' }
+
+  /api/v1/reviews/{id}:
+    get:
+      summary: Get review
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '200':
+          description: Review
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Review' }
+    put:
+      summary: Update review
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ReviewUpdate' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Review' }
+    delete:
+      summary: Delete review
+      parameters: [ { $ref: '#/components/parameters/IdPath' } ]
+      responses:
+        '204': { description: Deleted }
+
+components:
+  parameters:
+    IdPath:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer }
+
+  schemas:
+    ListMeta:
+      type: object
+      properties:
+        total: { type: integer, example: 42 }
+        limit: { type: integer, example: 20 }
+        offset: { type: integer, example: 0 }
+
+    # Users
+    User:
+      type: object
+      properties:
+        user_id: { type: integer }
+        name: { type: string }
+        email: { type: string, format: email }
+        role: { type: string, enum: [customer, admin] }
+        created_at: { type: string, format: date-time }
+    UserCreate:
+      type: object
+      required: [name, email, password_hash]
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        password_hash: { type: string }
+        role: { type: string, enum: [customer, admin], default: customer }
+    UserUpdate:
+      type: object
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        password_hash: { type: string }
+        role: { type: string, enum: [customer, admin] }
+    ListUsersResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ListMeta'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/User' }
+
+    # Categories
+    Category:
+      type: object
+      properties:
+        category_id: { type: integer }
+        name: { type: string }
+        created_at: { type: string, format: date-time }
+    CategoryCreate:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+    CategoryUpdate:
+      type: object
+      properties:
+        name: { type: string }
+    ListCategoriesResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ListMeta'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/Category' }
+
+    # Products
+    Product:
+      type: object
+      properties:
+        product_id: { type: integer }
+        name: { type: string }
+        description: { type: string, nullable: true }
+        price: { type: number, format: float }
+        stock_qty: { type: integer }
+        category_id: { type: integer, nullable: true }
+        created_at: { type: string, format: date-time }
+    ProductCreate:
+      type: object
+      required: [name, price, stock_qty]
+      properties:
+        name: { type: string }
+        description: { type: string, nullable: true }
+        price: { type: number, format: float }
+        stock_qty: { type: integer }
+        category_id: { type: integer, nullable: true }
+    ProductUpdate:
+      type: object
+      properties:
+        name: { type: string }
+        description: { type: string, nullable: true }
+        price: { type: number, format: float }
+        stock_qty: { type: integer }
+        category_id: { type: integer, nullable: true }
+    ListProductsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ListMeta'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/Product' }
+
+    # Orders
+    Order:
+      type: object
+      properties:
+        order_id: { type: integer }
+        user_id: { type: integer }
+        order_date: { type: string, format: date-time }
+        total_amount: { type: number, format: float }
+        status:
+          type: string
+          enum: [pending, paid, shipped, delivered, cancelled]
+    OrderCreateItem:
+      type: object
+      required: [product_id, quantity]
+      properties:
+        product_id: { type: integer }
+        quantity: { type: integer }
+        size: { type: string, nullable: true }
+        color: { type: string, nullable: true }
+    OrderCreate:
+      type: object
+      required: [user_id]
+      properties:
+        user_id: { type: integer }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/OrderCreateItem' }
+    OrderUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, paid, shipped, delivered, cancelled]
+    ListOrdersResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ListMeta'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/Order' }
+
+    # Order Items
+    OrderItem:
+      type: object
+      properties:
+        order_item_id: { type: integer }
+        order_id: { type: integer }
+        product_id: { type: integer }
+        size: { type: string, nullable: true }
+        color: { type: string, nullable: true }
+        quantity: { type: integer }
+        item_price: { type: number, format: float }
+    OrderItemCreate:
+      type: object
+      required: [order_id, product_id, quantity]
+      properties:
+        order_id: { type: integer }
+        product_id: { type: integer }
+        quantity: { type: integer }
+        size: { type: string, nullable: true }
+        color: { type: string, nullable: true }
+        item_price:
+          type: number
+          format: float
+          description: Optional; if omitted server will use product price
+    OrderItemUpdate:
+      type: object
+      properties:
+        quantity: { type: integer }
+        size: { type: string, nullable: true }
+        color: { type: string, nullable: true }
+    ListOrderItemsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ListMeta'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/OrderItem' }
+
+    # Payments
+    Payment:
+      type: object
+      properties:
+        payment_id: { type: integer }
+        order_id: { type: integer }
+        payment_date: { type: string, format: date-time }
+        payment_method:
+          type: string
+          enum: [credit_card, paypal, cash_on_delivery]
+        amount: { type: number, format: float }
+        currency: { type: string, example: USD }
+        status:
+          type: string
+          enum: [pending, completed, failed, refunded]
+        transaction_id: { type: string, nullable: true }
+        metadata:
+          type: object
+          additionalProperties: true
+    PaymentCreate:
+      type: object
+      required: [order_id, payment_method, amount]
+      properties:
+        order_id: { type: integer }
+        payment_method:
+          type: string
+          enum: [credit_card, paypal, cash_on_delivery]
+        amount: { type: number, format: float }
+        currency: { type: string, example: USD }
+        status:
+          type: string
+          enum: [pending, completed, failed, refunded]
+        transaction_id: { type: string, nullable: true }
+        metadata:
+          type: object
+          additionalProperties: true
+    PaymentUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, completed, failed, refunded]
+    ListPaymentsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ListMeta'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/Payment' }
+
+    # Reviews
+    Review:
+      type: object
+      properties:
+        review_id: { type: integer }
+        user_id: { type: integer }
+        product_id: { type: integer }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        comment: { type: string, nullable: true }
+        created_at: { type: string, format: date-time }
+    ReviewCreate:
+      type: object
+      required: [user_id, product_id, rating]
+      properties:
+        user_id: { type: integer }
+        product_id: { type: integer }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        comment: { type: string, nullable: true }
+    ReviewUpdate:
+      type: object
+      properties:
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        comment: { type: string, nullable: true }
+    ListReviewsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ListMeta'
+        - type: object
+          properties:
+            items:
+              type: array
+              items: { $ref: '#/components/schemas/Review' }
