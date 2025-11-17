@@ -10,14 +10,15 @@ class ReviewsDAO extends BaseDAO {
 
     public function createReview(int $userId, int $productId, int $rating, ?string $comment = null): int {
         return $this->create([
-            'user_id' => $userId,
+            'user_id'    => $userId,
             'product_id' => $productId,
-            'rating' => $rating,
-            'comment' => $comment
+            'rating'     => $rating,
+            'comment'    => $comment
         ]);
     }
 
     public function updateReview(int $id, array $fields): bool {
+        // immutable keys for this DAO-level helper:
         unset($fields['review_id'], $fields['user_id'], $fields['product_id']);
         if (empty($fields)) return true;
         return $this->update($id, $fields);
@@ -35,5 +36,25 @@ class ReviewsDAO extends BaseDAO {
         $stmt->bindValue(':off', $offset, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /** Optional: list by user (useful for profile pages) */
+    public function listReviewsForUser(int $userId, int $limit = 100, int $offset = 0): array {
+        $sql = "SELECT * FROM reviews WHERE user_id = :uid ORDER BY review_id DESC LIMIT :lim OFFSET :off";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':uid', $userId, PDO::PARAM_INT);
+        $stmt->bindValue(':lim', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':off', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /** Optional: direct lookup to pre-check duplicate constraint if you want */
+    public function findByUserAndProduct(int $userId, int $productId): ?array {
+        $sql = "SELECT * FROM reviews WHERE user_id = :uid AND product_id = :pid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':uid' => $userId, ':pid' => $productId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
     }
 }

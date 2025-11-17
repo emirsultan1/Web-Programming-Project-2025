@@ -90,3 +90,34 @@ You should see an output similar to:
 
 
 These tests confirm that the database connection works, all CRUD operations are functional, relationships between tables are correct, and unique constraints (like one review per user per product) are enforced.
+
+
+Milestone 3 – REST API, Services & OpenAPI Docs
+
+Deadline: November 16, 2025
+
+Milestone 3 focused on converting the backend into a complete REST API using FlightPHP, adding full business logic, a small admin presentation layer, and generating official API documentation.
+
+✔ What was completed
+
+Full REST API for all 7 entities (Users, Categories, Products, Orders, Order Items, Reviews, Payments)
+→ Implemented using FlightPHP routes.
+
+Service Layer
+→ Each entity has a dedicated Service class with validation and business logic (order totals, payment status updates, review constraints, etc.).
+
+Presentation Layer (Admin)
+→ Simple HTML pages rendered with FlightPHP (e.g., /admin/products) to satisfy the requirement.
+
+OpenAPI Documentation (Swagger)
+→ Added openapi.yaml and a Swagger UI page at /docs/ for visual API documentation.
+
+✔ Deliverables met
+
+CRUD endpoints for every entity
+
+Modular backend (DAO + Service + Route)
+
+Basic admin page
+
+Full OpenAPI 3.0 documentation
