@@ -847,5 +847,176 @@
 		perturbance: 0.04
 	});
     
-    
-})(jQuery);	
+
+    // -----------------------------------------
+    // Simple Cart + Checkout → POST /api/v1/orders
+    // -----------------------------------------
+
+    const CART_STORAGE_KEY = 'cart_items';
+
+    // Load cart from localStorage
+    function loadCartItems() {
+        try {
+            const raw = localStorage.getItem(CART_STORAGE_KEY);
+            if (!raw) return [];
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) return [];
+            return parsed;
+        } catch (e) {
+            return [];
+        }
+    }
+
+    // Render cart into checkout1.html
+    function renderCheckoutCart() {
+        const $tbody      = $('#checkout-order-body');
+        const $subtotalEl = $('#checkout-subtotal');
+        const $shippingEl = $('#checkout-shipping');
+        const $totalEl    = $('#checkout-total');
+
+        // If we are not on the checkout page, do nothing
+        if (!$tbody.length) return;
+
+        const items = loadCartItems();
+
+        if (!items.length) {
+            $tbody.html('<tr><td colspan="2">Your cart is empty.</td></tr>');
+            if ($subtotalEl.length) $subtotalEl.text('$0.00');
+            if ($shippingEl.length) $shippingEl.text('$0.00');
+            if ($totalEl.length)    $totalEl.text('$0.00');
+            return;
+        }
+
+        let html      = '';
+        let subtotal  = 0;
+
+        items.forEach(function (item) {
+            const name  = item.name || ('Product #' + item.product_id);
+            const qty   = item.quantity ? Number(item.quantity) : 1;
+            const price = item.price ? Number(item.price) : 0;
+            const line  = price * qty;
+            subtotal   += line;
+
+            const lineText = line ? '$' + line.toFixed(2) : '$0.00';
+
+            html += `
+                <tr>
+                    <td>${name} <strong> × ${qty}</strong></td>
+                    <td>${lineText}</td>
+                </tr>
+            `;
+        });
+
+        $tbody.html(html);
+
+        const shipping = 0; // flat 0 for now
+
+        if ($subtotalEl.length) $subtotalEl.text('$' + subtotal.toFixed(2));
+        if ($shippingEl.length) $shippingEl.text('$' + shipping.toFixed(2));
+        if ($totalEl.length)    $totalEl.text('$' + (subtotal + shipping).toFixed(2));
+    }
+
+    // Handle checkout "Place Order"
+    function handleCheckoutSubmit(e) {
+        e.preventDefault();
+
+        const $msg = $('#checkout-order-message');
+        if ($msg.length) {
+            $msg.removeClass('error success').text('');
+        }
+
+        const items = loadCartItems();
+
+        if (!items.length) {
+            if ($msg.length) {
+                $msg.text('Your cart is empty. Please add some products first.')
+                    .addClass('error');
+            }
+            return;
+        }
+
+        // Build payload for API
+        const payloadItems = items
+            .map(function (item) {
+                return {
+                    product_id: item.product_id,
+                    quantity: item.quantity || 1,
+                    size: item.size || null,
+                    color: item.color || null
+                };
+            })
+            .filter(function (it) { return it.product_id; });
+
+        if (!payloadItems.length) {
+            if ($msg.length) {
+                $msg.text('Could not read products from your cart.')
+                    .addClass('error');
+            }
+            return;
+        }
+
+        // Use global API_BASE if available (from forms.js)
+        const base = (typeof API_BASE !== 'undefined')
+            ? API_BASE
+            : 'http://localhost:8000';
+
+        $.ajax({
+            url: base + '/api/v1/orders',
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
+            data: JSON.stringify({ items: payloadItems }),
+            success: function (res) {
+                if (res && res.success) {
+                    // Clear cart
+                    localStorage.removeItem(CART_STORAGE_KEY);
+                    renderCheckoutCart();
+
+                    if ($msg.length) {
+                        $msg.text('Order placed successfully!')
+                            .addClass('success');
+                    }
+
+                    // Go to My Account so user sees their orders
+                    window.location.hash = 'myaccount';
+                } else {
+                    if ($msg.length) {
+                        $msg.text('Could not place order. Please try again.')
+                            .addClass('error');
+                    }
+                }
+            },
+            error: function (xhr) {
+                let text = 'Could not place order.';
+
+                if (xhr.status === 401) {
+                    text = 'You must be logged in to place an order.';
+                }
+
+                try {
+                    const json = JSON.parse(xhr.responseText);
+                    if (json && json.error && json.error.message) {
+                        text += ' ' + json.error.message;
+                    }
+                } catch (e) {}
+
+                if ($msg.length) {
+                    $msg.text(text).addClass('error');
+                }
+            }
+        });
+    }
+
+    // Attach on page ready
+    $(function () {
+        // If we’re on the checkout page, render whatever is in the cart
+        renderCheckoutCart();
+
+        // Intercept the checkout form submit
+        $(document).on('submit', '#checkout-order-form', handleCheckoutSubmit);
+    });
+
+})(jQuery);

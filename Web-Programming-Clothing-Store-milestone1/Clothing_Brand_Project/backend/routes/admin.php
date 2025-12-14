@@ -1,16 +1,27 @@
 <?php
+declare(strict_types=1);
+
 // -----------------------------
 // Admin (Presentation Layer)
 // -----------------------------
 
-// Simple ping (you already tested this)
+require_once __DIR__ . '/../middleware/AuthMiddleware.php';
+
+// Simple ping (ADMIN ONLY)
 \Flight::route('GET /admin/ping', function () {
+  if (!AuthMiddleware::requireRole('admin')) {
+    return;
+  }
   header('Content-Type: text/plain; charset=utf-8');
   echo "admin ok";
 });
 
-// Views path check (you already tested this)
+// Views path check (ADMIN ONLY)
 \Flight::route('GET /admin/debug/views', function () {
+  if (!AuthMiddleware::requireRole('admin')) {
+    return;
+  }
+
   $path = \Flight::get('flight.views.path');
   $tpl  = $path . DIRECTORY_SEPARATOR . 'products_list.php';
   header('Content-Type: application/json; charset=utf-8');
@@ -21,9 +32,13 @@
   ], JSON_UNESCAPED_UNICODE);
 });
 
-// === DIAGNOSTIC VERSION of /admin/products ===
-// This will catch any exception and print it on the page so we can see what's wrong.
+// /admin/products (ADMIN ONLY)
+// Kept your try/catch, but now protected.
 \Flight::route('GET /admin/products', function () {
+  if (!AuthMiddleware::requireRole('admin')) {
+    return;
+  }
+
   try {
     // 1) confirm ProductService is registered
     $svc = \Flight::get('ProductService');

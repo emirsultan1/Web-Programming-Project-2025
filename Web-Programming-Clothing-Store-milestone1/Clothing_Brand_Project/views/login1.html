@@ -1,56 +1,72 @@
-   <!-- customer login start -->
-   <div class="customer_login">
+<!-- customer login start -->
+<div class="customer_login">
     <div class="container">
         <div class="row">
            <!--login area start-->
             <div class="col-lg-6 col-md-6">
                 <div class="account_form">
-                    <h2>login</h2>
-                    <form action="#login1">
-                        <p>   
-                            <label>Username or email <span>*</span></label>
-                            <input type="text">
-                         </p>
-                         <p>   
-                            <label>Passwords <span>*</span></label>
-                            <input type="password">
-                         </p>   
+                    <h2>Login</h2>
+
+                    <!-- LOGIN FORM -->
+                    <form id="login-form">
+                        <p>
+                            <label>Email address <span>*</span></label>
+                            <input type="email" id="login-email" name="email">
+                        </p>
+                        <p>
+                            <label>Password <span>*</span></label>
+                            <input type="password" id="login-password" name="password">
+                        </p>
                         <div class="login_submit">
-                           <a href="#login1">Lost your password?</a>
+                            <a href="#login1">Lost your password?</a>
                             <label for="remember">
                                 <input id="remember" type="checkbox">
                                 Remember me
                             </label>
-                            <button type="submit">login</button>
-                            
+                            <button type="submit">LOGIN</button>
                         </div>
 
+                        <!-- message area for login -->
+                        <p id="login-message" style="margin-top:10px;"></p>
                     </form>
-                 </div>    
+                </div>
             </div>
-            <!--login area start-->
+            <!--login area end-->
 
             <!--register area start-->
             <div class="col-lg-6 col-md-6">
                 <div class="account_form register">
                     <h2>Register</h2>
-                    <form action="#">
-                        <p>   
-                            <label>Email address  <span>*</span></label>
-                            <input type="text">
-                         </p>
-                         <p>   
-                            <label>Passwords <span>*</span></label>
-                            <input type="password">
-                         </p>
+
+                    <!-- REGISTER FORM -->
+                    <form id="register-form">
+                        <p>
+                            <label>Name <span>*</span></label>
+                            <input type="text" id="reg-name" name="name">
+                        </p>
+                        <p>
+                            <label>Email address <span>*</span></label>
+                            <input type="email" id="reg-email" name="email">
+                        </p>
+                        <p>
+                            <label>Password <span>*</span></label>
+                            <input type="password" id="reg-password" name="password">
+                        </p>
+                        <p>
+                            <label>Confirm Password <span>*</span></label>
+                            <input type="password" id="reg-password-confirm" name="password_confirm">
+                        </p>
                         <div class="login_submit">
-                            <button type="submit">Register</button>
+                            <button type="submit">REGISTER</button>
                         </div>
+
+                        <!-- message area for register -->
+                        <p id="register-message" style="margin-top:10px;"></p>
                     </form>
-                </div>    
+                </div>
             </div>
             <!--register area end-->
         </div>
-    </div>    
+    </div>
 </div>
 <!-- customer login end -->

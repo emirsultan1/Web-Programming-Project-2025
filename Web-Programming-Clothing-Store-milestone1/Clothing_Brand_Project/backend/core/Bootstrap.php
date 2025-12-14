@@ -4,8 +4,9 @@ namespace App\Core;
 use Flight;
 
 /**
- * Initializes the backend environment for Milestone 3
+ * Initializes the backend environment (Milestone 4)
  * - loads DAOs (plain PHP classes)
+ * - loads core helpers used by services
  * - registers Services in Flight's container
  * - sets timezone
  */
@@ -13,6 +14,12 @@ final class Bootstrap {
   public static function init(): void {
     // timezone
     date_default_timezone_set('Africa/Cairo');
+
+    // === Require Core helpers (used in Services) ===
+    // If you already have Composer PSR-4 autoload for App\Core, these are harmless.
+    // If you DON'T, these prevent "Class not found" errors.
+    require_once __DIR__ . '/Validator.php';
+    require_once __DIR__ . '/Paginator.php';
 
     // === Require DAOs ===
     require_once __DIR__ . '/../dao/BaseDAO.php';

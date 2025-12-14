@@ -13,7 +13,6 @@
     <!-- CSS 
     ========================= -->
 
-
     <!-- Plugins CSS -->
     <link rel="stylesheet" href="../assets/css/plugins.css">
     
@@ -251,7 +250,7 @@
         <!--header top start-->
         <div class="header_top">
             <div class="container">   
-                <div class="row align-items-center">
+            <div class="row align-items-center">
 
                     <div class="col-lg-7 col-md-12">
                         <div class="welcome_text">
@@ -424,11 +423,9 @@
                                                     </li>
                                                     <li><a href="#">other Pages</a>
                                                         <ul>
-                                                                                                        <li><a href="cart.html">cart</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
-                                                <li><a href="my-account.html">my account</a></li>
-
-
+                                                            <li><a href="cart.html">cart</a></li>
+                                                            <li><a href="checkout.html">Checkout</a></li>
+                                                            <li><a href="my-account.html">my account</a></li>
                                                         </ul>
                                                     </li>
                                                     <li><a href="#">Product Types</a>
@@ -438,7 +435,6 @@
                                                             <li><a href="product-gallery.html">product gallery</a></li>
                                                             <li><a href="product-grouped.html">product grouped</a></li>
                                                             <li><a href="variable-product.html">product variable</a></li>
-
                                                         </ul>
                                                     </li>
                                                     <li><a href="#">collection</a>
@@ -448,7 +444,6 @@
                                                             <li><a href="shop.html">Clothing</a></li>
                                                             <li><a href="shop.html">Shoes</a></li>
                                                             <li><a href="shop.html">Check Trousers</a></li>
-
                                                         </ul>
                                                     </li>
                                                     <li class="banner_menu"><a href="#"><img src="assets/img/bg/banner1.jpg" alt=""></a></li>
@@ -462,10 +457,10 @@
                                             <li class="active"><a href="#">pages <i class="fa fa-angle-down"></i></a>
                                                 <ul class="sub_menu pages">
                                                     <li><a href="about.html">About Us</a></li>
-                                        <li><a href="faq.html">Frequently Questions</a></li>
-                                        <li><a href="contact.html">contact</a></li>
-                                        <li><a href="login.html">login</a></li>
-                                        <li><a href="wishlist.html">Wishlist</a></li>
+                                                    <li><a href="faq.html">Frequently Questions</a></li>
+                                                    <li><a href="contact.html">contact</a></li>
+                                                    <li><a href="login.html">login</a></li>
+                                                    <li><a href="wishlist.html">Wishlist</a></li>
 
                                                 </ul>
                                             </li>
@@ -514,15 +509,15 @@
                <!--login area start-->
                 <div class="col-lg-6 col-md-6">
                     <div class="account_form">
-                        <h2>login</h2>
-                        <form action="#">
+                        <h2>Login</h2>
+                        <form id="login-form">
                             <p>   
-                                <label>Username or email <span>*</span></label>
-                                <input type="text">
+                                <label>Email <span>*</span></label>
+                                <input type="email" name="email" id="login-email" required>
                              </p>
                              <p>   
-                                <label>Passwords <span>*</span></label>
-                                <input type="password">
+                                <label>Password <span>*</span></label>
+                                <input type="password" name="password" id="login-password" required>
                              </p>   
                             <div class="login_submit">
                                <a href="#">Lost your password?</a>
@@ -530,31 +525,41 @@
                                     <input id="remember" type="checkbox">
                                     Remember me
                                 </label>
-                                <button type="submit">login</button>
-                                
+                                <button type="submit">Login</button>
                             </div>
 
+                            <div id="login-message" class="form-message" style="margin-top:10px;"></div>
                         </form>
                      </div>    
                 </div>
-                <!--login area start-->
+                <!--login area end-->
 
                 <!--register area start-->
                 <div class="col-lg-6 col-md-6">
                     <div class="account_form register">
                         <h2>Register</h2>
-                        <form action="#">
+                        <form id="register-form">
+                            <p>   
+                                <label>Name <span>*</span></label>
+                                <input type="text" name="name" id="register-name" required>
+                             </p>
                             <p>   
                                 <label>Email address  <span>*</span></label>
-                                <input type="text">
+                                <input type="email" name="email" id="register-email" required>
                              </p>
                              <p>   
-                                <label>Passwords <span>*</span></label>
-                                <input type="password">
+                                <label>Password <span>*</span></label>
+                                <input type="password" name="password" id="register-password" required>
+                             </p>
+                             <p>   
+                                <label>Confirm Password <span>*</span></label>
+                                <input type="password" name="password_confirm" id="register-password-confirm" required>
                              </p>
                             <div class="login_submit">
                                 <button type="submit">Register</button>
                             </div>
+
+                            <div id="register-message" class="form-message" style="margin-top:10px;"></div>
                         </form>
                     </div>    
                 </div>
@@ -564,7 +569,7 @@
     </div>
     <!-- customer login end -->
 
-         <!--footer area start-->
+    <!--footer area start-->
     <footer class="footer_widgets other_widgets">
         <div class="footer_top">
             <div class="container">
@@ -590,10 +595,10 @@
                                 <div class="footer_menu">
                                     <ul>
                                         <li><a href="#">Brands</a></li>
-                                    <li><a href="#">Gift Certificates</a></li>
-                                    <li><a href="#">Affiliate</a></li>
-                                    <li><a href="#">Specials</a></li>
-                                    <li><a href="my-account.html">My Account</a></li>
+                                        <li><a href="#">Gift Certificates</a></li>
+                                        <li><a href="#">Affiliate</a></li>
+                                        <li><a href="#">Specials</a></li>
+                                        <li><a href="my-account.html">My Account</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -659,16 +664,14 @@
     </footer>
     <!--footer area end-->
 
-<!-- JS
-============================================ -->
+    <!-- JS
+    ============================================ -->
 
-<!-- Plugins JS -->
-<script src="assets/js/plugins.js"></script>
+    <!-- Plugins JS -->
+    <script src="assets/js/plugins.js"></script>
 
-<!-- Main JS -->
-<script src="assets/js/main.js"></script>
-
-
+    <!-- Main JS -->
+    <script src="assets/js/main.js"></script>
 
 </body>
 

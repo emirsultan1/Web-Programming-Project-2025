@@ -17,18 +17,33 @@ final class OrderService {
     private \UsersDAO $usersDao
   ) {}
 
-  /** List orders with pagination metadata */
+  /**
+   * List all orders with pagination metadata (admin usage)
+   */
   public function list(array $q = []): array {
-    [$limit,$offset] = Paginator::fromQuery($q);
-    $items = $this->dao->findAll($limit,$offset);
+    [$limit, $offset] = Paginator::fromQuery($q);
+    $items = $this->dao->findAll($limit, $offset);
     $total = $this->dao->countAll();
-    return compact('items','total','limit','offset');
+    return compact('items', 'total', 'limit', 'offset');
+  }
+
+  /**
+   * List orders for a specific user with pagination metadata
+   * Used by /api/v1/my-orders
+   */
+  public function listByUser(int $userId, array $q = []): array {
+    [$limit, $offset] = Paginator::fromQuery($q);
+    $items = $this->dao->findAllByUser($userId, $limit, $offset);
+    $total = $this->dao->countAllByUser($userId);
+    return compact('items', 'total', 'limit', 'offset');
   }
 
   /** Get an order by id (404 if missing) */
   public function get(int $id): array {
     $row = $this->dao->findById($id);
-    if (!$row) throw new \RuntimeException('Order not found', 404);
+    if (!$row) {
+      throw new \RuntimeException('Order not found', 404);
+    }
     return $row;
   }
 
@@ -49,7 +64,9 @@ final class OrderService {
 
     // Verify user exists
     $user = $this->usersDao->findById((int)$data['user_id']);
-    if (!$user) throw new \RuntimeException('User not found', 404);
+    if (!$user) {
+      throw new \RuntimeException('User not found', 404);
+    }
 
     // Create base order (pending, total 0 initially)
     $orderId = $this->dao->create([
@@ -62,12 +79,16 @@ final class OrderService {
     $total = 0.0;
     if (!empty($data['items']) && is_array($data['items'])) {
       foreach ($data['items'] as $it) {
-        Validator::requireFields($it, ['product_id','quantity']);
+        Validator::requireFields($it, ['product_id', 'quantity']);
         $product = $this->productsDao->findById((int)$it['product_id']);
-        if (!$product) throw new \RuntimeException('Product not found: '.$it['product_id'], 404);
+        if (!$product) {
+          throw new \RuntimeException('Product not found: '.$it['product_id'], 404);
+        }
 
         $qty = (int)$it['quantity'];
-        if ($qty < 1) throw new \InvalidArgumentException('quantity >= 1', 422);
+        if ($qty < 1) {
+          throw new \InvalidArgumentException('quantity >= 1', 422);
+        }
 
         $price = (float)$product['price'];
         $this->itemsDao->create([
@@ -102,14 +123,20 @@ final class OrderService {
         throw new \InvalidArgumentException('invalid status', 422);
       }
     }
+
     $ok = $this->dao->update($id, $data);
-    if (!$ok) throw new \RuntimeException('Order not found', 404);
+    if (!$ok) {
+      throw new \RuntimeException('Order not found', 404);
+    }
+
     return $this->get($id);
   }
 
   /** Delete order (cascade removes items via FK) */
   public function delete(int $id): void {
     $ok = $this->dao->delete($id);
-    if (!$ok) throw new \RuntimeException('Order not found', 404);
+    if (!$ok) {
+      throw new \RuntimeException('Order not found', 404);
+    }
   }
 }
