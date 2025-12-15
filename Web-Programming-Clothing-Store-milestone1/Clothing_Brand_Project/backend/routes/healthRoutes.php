@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 // Health check
 \Flight::route('GET /api/v1/health', function () {
-  header('Content-Type: application/json; charset=utf-8');
-  echo json_encode([
+  \Flight::json([
     'status' => 'ok',
     'ts'     => date(DATE_ATOM),
   ]);

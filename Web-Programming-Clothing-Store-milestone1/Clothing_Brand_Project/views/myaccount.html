@@ -1,6 +1,6 @@
-   <!-- my account start  -->
-   <section class="main_content_area">
-    <div class="container">   
+<!-- my account start  -->
+<section class="main_content_area" id="myaccount">
+    <div class="container">
         <div class="account_dashboard">
             <div class="row">
                 <div class="col-sm-12 col-md-3 col-lg-3">
@@ -8,21 +8,60 @@
                     <div class="dashboard_tab_button">
                         <ul role="tablist" class="nav flex-column dashboard-list">
                             <li><a href="#dashboard" data-toggle="tab" class="nav-link active">Dashboard</a></li>
-                            <li> <a href="#orders" data-toggle="tab" class="nav-link">Orders</a></li>
+                            <li><a href="#orders" data-toggle="tab" class="nav-link">Orders</a></li>
                             <li><a href="#downloads" data-toggle="tab" class="nav-link">Downloads</a></li>
                             <li><a href="#address" data-toggle="tab" class="nav-link">Addresses</a></li>
                             <li><a href="#account-details" data-toggle="tab" class="nav-link">Account details</a></li>
-                            <li><a href="login.html" class="nav-link">logout</a></li>
+
+                            <!-- ✅ ADMIN ONLY TAB -->
+                            <li class="admin-only" style="display:none;">
+                                <a href="#admin-panel" data-toggle="tab" class="nav-link">
+                                    Admin Panel
+                                </a>
+                            </li>
+
+                            <!-- REAL logout (JS will handle it) -->
+                            <li><a href="#" id="account-logout" class="nav-link">Logout</a></li>
                         </ul>
-                    </div>    
+                    </div>
                 </div>
+
                 <div class="col-sm-12 col-md-9 col-lg-9">
                     <!-- Tab panes -->
                     <div class="tab-content dashboard_content">
+
+                        <!-- DASHBOARD -->
                         <div class="tab-pane fade show active" id="dashboard">
-                            <h3>Dashboard </h3>
-                            <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">Edit your password and account details.</a></p>
+                            <h3>
+                                Dashboard
+                                <!-- ✅ ADMIN BADGE (admin-only) -->
+                                <span class="admin-only" style="display:none; margin-left:10px; font-size:12px; padding:4px 8px; border:1px solid #333; border-radius:6px;">
+                                    Admin Mode
+                                </span>
+                            </h3>
+
+                            <p>
+                                Welcome back,
+                                <strong id="acct-name">Guest</strong>
+                                (<span id="acct-email">not logged in</span>).
+                            </p>
+
+                            <p class="admin-only" style="display:none;">
+                                ✅ You are logged in as an <strong>Admin</strong>. You can access admin-only API actions (create/update/delete).
+                                Use the <strong>Admin Panel</strong> tab to see admin tools.
+                            </p>
+
+                            <p>
+                                From your account dashboard you can view your
+                                <a href="#orders" data-toggle="tab">recent orders</a>,
+                                manage your
+                                <a href="#address" data-toggle="tab">shipping and billing addresses</a>,
+                                and edit your
+                                <a href="#account-details" data-toggle="tab">password and account details</a>.
+                            </p>
                         </div>
+
+                        <!-- ORDERS (now dynamic) -->
                         <div class="tab-pane fade" id="orders">
                             <h3>Orders</h3>
                             <div class="table-responsive">
@@ -33,28 +72,17 @@
                                             <th>Date</th>
                                             <th>Status</th>
                                             <th>Total</th>
-                                            <th>Actions</th>	 	 	 	
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>May 10, 2018</td>
-                                            <td><span class="success">Completed</span></td>
-                                            <td>$25.00 for 1 item </td>
-                                            <td><a href="cart.html" class="view">view</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>May 10, 2018</td>
-                                            <td>Processing</td>
-                                            <td>$17.00 for 1 item </td>
-                                            <td><a href="cart.html" class="view">view</a></td>
-                                        </tr>
+                                    <tbody id="orders-table-body">
+                                        <!-- Filled dynamically by JS via /api/v1/my-orders -->
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+
+                        <!-- DOWNLOADS (dummy content) -->
                         <div class="tab-pane fade" id="downloads">
                             <h3>Downloads</h3>
                             <div class="table-responsive">
@@ -64,7 +92,7 @@
                                             <th>Product</th>
                                             <th>Downloads</th>
                                             <th>Expires</th>
-                                            <th>Download</th>	 	 	 	
+                                            <th>Download</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -84,8 +112,10 @@
                                 </table>
                             </div>
                         </div>
+
+                        <!-- ADDRESS (still static) -->
                         <div class="tab-pane" id="address">
-                           <p>The following addresses will be used on the checkout page by default.</p>
+                            <p>The following addresses will be used on the checkout page by default.</p>
                             <h4 class="billing-address">Billing address</h4>
                             <a href="#" class="view">Edit</a>
                             <p><strong>Bobby Jackson</strong></p>
@@ -97,54 +127,117 @@
                                 Dhaka <br>
                                 1212
                             </address>
-                            <p>Bangladesh</p>   
+                            <p>Bangladesh</p>
                         </div>
+
+                        <!-- ACCOUNT DETAILS -->
                         <div class="tab-pane fade" id="account-details">
-                            <h3>Account details </h3>
+                            <h3>Account details</h3>
                             <div class="login">
                                 <div class="login_form_container">
                                     <div class="account_login_form">
-                                        <form action="#">
-                                            <p>Already have an account? <a href="#">Log in instead!</a></p>
+                                        <form action="#" id="account-details-form">
                                             <div class="input-radio">
                                                 <span class="custom-radio"><input type="radio" value="1" name="id_gender"> Mr.</span>
                                                 <span class="custom-radio"><input type="radio" value="1" name="id_gender"> Mrs.</span>
-                                            </div> <br>
+                                            </div>
+                                            <br>
+
                                             <label>First Name</label>
                                             <input type="text" name="first-name">
+
                                             <label>Last Name</label>
                                             <input type="text" name="last-name">
+
                                             <label>Email</label>
-                                            <input type="text" name="email-name">
-                                            <label>Password</label>
+                                            <input type="text" name="email-name" id="acct-email-input">
+
+                                            <label>New Password (optional)</label>
                                             <input type="password" name="user-password">
+
                                             <label>Birthdate</label>
                                             <input type="text" placeholder="MM/DD/YYYY" value="" name="birthday">
-                                            <span class="example">
-                                              (E.g.: 05/31/1970)
-                                            </span>
+                                            <span class="example">(E.g.: 05/31/1970)</span>
+
                                             <br>
+
                                             <span class="custom_checkbox">
                                                 <input type="checkbox" value="1" name="optin">
                                                 <label>Receive offers from our partners</label>
                                             </span>
+
                                             <br>
+
                                             <span class="custom_checkbox">
                                                 <input type="checkbox" value="1" name="newsletter">
-                                                <label>Sign up for our newsletter<br><em>You may unsubscribe at any moment. For that purpose, please find our contact info in the legal notice.</em></label>
+                                                <label>
+                                                    Sign up for our newsletter<br>
+                                                    <em>You may unsubscribe at any moment. For that purpose, please find our contact info in the legal notice.</em>
+                                                </label>
                                             </span>
+
                                             <div class="save_button primary_btn default_button">
-                                                <a href="#">Save</a>
+                                                <a href="#" id="account-save">Save</a>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                        <!-- ✅ ADMIN PANEL (ADMIN ONLY) -->
+                        <div class="tab-pane fade admin-only" id="admin-panel" style="display:none;">
+                            <h3>Admin Panel</h3>
+                            <p>
+                                You are logged in as <strong>Admin</strong>. These tools are admin-only.
+                            </p>
+
+                            <div style="margin-top: 15px; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                                <h4 style="margin-bottom: 8px;">Quick Links</h4>
+                                <ul style="margin:0; padding-left:18px;">
+                                    <li>
+                                        <a href="http://localhost:8000/admin/products" target="_blank">
+                                            Admin Products Page (backend render)
+                                        </a>
+                                        <small style="display:block; opacity:0.8;">(If you kept /admin/products route)</small>
+                                    </li>
+                                    <li>
+                                        <a href="http://localhost:8000/api/v1/products" target="_blank">
+                                            View Products API (public GET)
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="http://localhost:8000/api/v1/orders" target="_blank">
+                                            Orders API (admin only)
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="http://localhost:8000/api/v1/users" target="_blank">
+                                            Users API (admin only)
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="http://localhost:8000/api/v1/payments" target="_blank">
+                                            Payments API (admin only)
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div style="margin-top: 15px; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                                <h4 style="margin-bottom: 8px;">Note</h4>
+                                <p style="margin:0;">
+                                    Your admin CRUD is mainly tested via <strong>Postman</strong>.
+                                    If you want, next step we can add an actual “Admin Manage Products” UI
+                                    (create/update/delete products) on the frontend.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div> <!-- .tab-content -->
                 </div>
             </div>
-        </div>  
-    </div>        	
-</section>			
-<!-- my account end   --> 
+        </div>
+    </div>
+</section>
+<!-- my account end   -->
