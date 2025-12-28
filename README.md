@@ -121,3 +121,107 @@ Modular backend (DAO + Service + Route)
 Basic admin page
 
 Full OpenAPI 3.0 documentation
+
+
+Milestone 5 – Frontend MVC Structure & Integration
+
+Deadline: December 2025
+
+Milestone 5 focused on improving the frontend architecture and ensuring a clean separation of concerns between the user interface, application logic, and backend communication. The main objective was to implement an MVC-like structure on the frontend, where API communication is strictly isolated from UI code.
+
+✔ What Was Completed
+Frontend MVC-like Architecture (Service Layer on Frontend)
+
+To meet the milestone requirement, the frontend was refactored to follow a clear MVC-style separation:
+
+Service Layer (API communication only):
+
+assets/js/services/http.js
+
+assets/js/services/AuthService.js
+
+assets/js/services/AccountService.js
+
+assets/js/services/OrderService.js
+
+These files are the only place where HTTP requests (fetch/AJAX) are made.
+They encapsulate all backend communication and return clean data to the rest of the application.
+
+Controller Layer (logic & coordination):
+
+assets/js/forms.js
+
+This file:
+
+Listens to form submissions (login, register, checkout, profile actions)
+
+Performs basic logic and flow control
+
+Calls Service methods
+
+Contains no direct API calls
+
+View / UI Layer:
+
+assets/js/main.js
+
+This file:
+
+Handles UI behavior only (page switching, DOM updates, event listeners)
+
+Does not contain any fetch or backend logic
+
+Example Flow (Checkout)
+User clicks checkout
+→ main.js (UI event)
+→ forms.js (controller logic)
+→ OrderService.js (API request)
+→ backend REST API
+
+
+This structure ensures:
+
+Clear separation of responsibilities
+
+Easy maintenance and scalability
+
+Full compliance with the “frontend MVC” requirement
+
+✔ Core Functionality Verified
+
+Login and registration work correctly
+
+Session-based authentication using PHP sessions
+
+Orders can be created and retrieved
+
+User profile page loads account data and order history
+
+Backend logic from Milestones 2–4 remains unchanged and stable
+
+✔ Backend Validation
+
+Backend validation already exists and was reused:
+
+Required field checks
+
+Email format validation
+
+Password length validation
+
+This ensures data integrity even if frontend validation is bypassed.
+
+⚠ Client-side Validation (Partial)
+
+Basic client-side validation could be added in forms.js (e.g., empty fields, password length, password confirmation).
+This was considered optional and not critical for the core milestone objectives.
+
+❌ Deployment (Intentionally Not Submitted)
+
+Deployment to a production environment (Railway/Docker/MySQL cloud) was attempted but intentionally not included in the final submission.
+
+Due to time constraints and the risk of destabilizing an otherwise working system close to the deadline, the decision was made to submit Milestone 5 without deployment.
+
+The project runs correctly in a local development environment, and all architectural and functional requirements were met.
+
+I am satisfied with 3/5 points for this milestone, prioritizing correctness, clarity, and maintainability over partial or unstable deployment.
