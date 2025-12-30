@@ -767,13 +767,11 @@
 
 <!-- JS ============================================ -->
 
-
 <script src="assets/js/jquery-3.7.1.min.js"></script>
-<script src="assets/js/spapp/jquery.spapp.js"></script>
+
+<!-- ✅ SPApp: load ONLY ONE (pick min OR non-min, not both) -->
 <script src="assets/js/spapp/jquery.spapp.min.js"></script>
-<script src="assets/js/spapp/script.js"></script> 
-
-
+<script src="assets/js/spapp/script.js"></script>
 
 <!-- Plugins JS -->
 <script src="assets/js/plugins.js"></script>
@@ -782,9 +780,9 @@
 <!-- Main JS -->
 <script src="assets/js/main.js"></script>
 <script src="assets/js/itemGettingScript.js"></script>
-<script src="assets/js/forms.js"></script>
 
+<!-- ✅ IMPORTANT: forms.js is an ES module now (it has imports) -->
+<script type="module" src="assets/js/forms.js"></script>
 
 </body>
-
 </html>
